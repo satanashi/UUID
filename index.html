@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberUUID Generator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
+    <script>
+        // Применяем тему сразу при загрузке
+        document.documentElement.className = 
+            localStorage.getItem('theme') || 
+            (new Date().getHours() >= 19 ? 'dark-theme' : 'light-theme');
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div class="container">
+        <h1 class="cyber-title">UUID<span>_GENERATOR</span></h1>
+        <div class="cyber-box">
+            <div id="uuid-display" class="cyber-display"></div>
+            <button id="generate-btn" class="cyber-button">
+                <span class="glow-text">GENERATE</span>
+            </button>
+        </div>
+    </div>
+    <button id="theme-toggle" class="theme-toggle">⚡</button>
+    <script src="script.js"></script>
+</body>
+</html>

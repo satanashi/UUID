@@ -1,0 +1,176 @@
+:root {
+    --primary: #00f0ff;
+    --secondary: #ff2d75;
+    --bg: #0d0d1a;
+    --text: #e0e0ff;
+    --primary-rgb: 0, 240, 255;
+}
+
+.light-theme {
+    --primary: #0066ff;
+    --secondary: #ff0066;
+    --bg: #f0f0ff;
+    --text: #1a1a2e;
+    --primary-rgb: 0, 102, 255;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.cyber-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(rgba(var(--primary-rgb), 0.5), transparent 0.5px),
+        linear-gradient(90deg, rgba(var(--primary-rgb), 0.5), transparent 0.5px);
+    background-size: 40px 40px;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary);
+}
+
+.cyber-title span {
+    color: var(--secondary);
+    text-shadow: 0 0 10px var(--secondary);
+}
+
+.cyber-box {
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 20px var(--primary);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        var(--primary),
+        transparent
+    );
+    transform: rotate(30deg);
+    animation: shine 3s infinite;
+    opacity: 0.5;
+}
+
+@keyframes shine {
+    0% { transform: rotate(30deg) translate(-30%, -30%); }
+    100% { transform: rotate(30deg) translate(30%, 30%); }
+}
+
+.cyber-display {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--primary);
+    font-family: monospace;
+    color: var(--text);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.cyber-button {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--text);
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.cyber-button:hover {
+    background: rgba(var(--primary-rgb), 0.2);
+    box-shadow: 0 0 15px var(--primary);
+    transform: translateY(-2px);
+}
+
+.cyber-button .glow-text {
+    transition: all 0.3s ease;
+}
+
+.cyber-button.copied .glow-text {
+    color: var(--secondary);
+    text-shadow: 0 0 10px var(--secondary);
+}
+
+.glow-text {
+    text-shadow: 0 0 10px var(--primary);
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    box-shadow: 0 0 15px var(--primary);
+    transform: rotate(180deg);
+}
+
+.cyber-display.copied {
+    animation: pulse 0.5s ease;
+    border-color: var(--secondary);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 5px var(--primary); }
+    50% { box-shadow: 0 0 20px var(--secondary); }
+    100% { box-shadow: 0 0 5px var(--primary); }
+}
