@@ -149,7 +149,7 @@ body {
   overflow: visible;
 }
 
-/* === ГЛАВНЫЙ СВЕТЯЩИЙСЯ КОНТУР КАК В WINDOWS DEFENDER === */
+/* светящийся контур вокруг формы */
 .form-wrapper {
   background: var(--glass-bg);
   height: 280px;
@@ -172,7 +172,7 @@ body {
   content: "";
   position: absolute;
   inset: -3px;
-  border-radius: 22px;
+  border-radius: 20px;
   
   /* Уменьшаем размер светящегося пятна */
   background: radial-gradient(
@@ -182,7 +182,7 @@ body {
   );
 
   opacity: 0; 
-  filter: blur(12px); /* Уменьшаем размытие для более локального эффекта */
+  filter: blur(2px); /* Уменьшаем размытие для более локального эффекта */
   transition: opacity 0.2s ease-out;
 
   pointer-events: none;
@@ -199,7 +199,7 @@ body {
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
 
-  padding: 1px; /* толщина рамки */
+  padding: 2px; /* толщина рамки */
 }
 
 /* Когда активна — плавно показываем */
