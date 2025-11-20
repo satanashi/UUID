@@ -1,67 +1,150 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Конвертируем цвет в rgb для градиентов
-    const primaryColor = getComputedStyle(document.documentElement)
-        .getPropertyValue('--primary');
-    document.documentElement.style.setProperty('--primary-rgb', 
-        hexToRgb(primaryColor));
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
+  const generateBtn = document.getElementById('generate-btn');
+  const output = document.getElementById('uuid-output');
+  const formWrapper = document.querySelector(".form-wrapper");
 
-    // Генерация UUID
-    function generateUUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            const r = Math.random() * 16 | 0;
-            const v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+  // --- Точная реализация подсветки как в Windows Defender ---
+  const proximity = 90; // расстояние чувствительности
+  let isActive = false;
+
+  document.addEventListener("mousemove", (e) => {
+    const rect = formWrapper.getBoundingClientRect();
+
+    const cx = e.clientX;
+    const cy = e.clientY;
+
+    // ближайшая точка к границе
+    const nx = Math.max(rect.left, Math.min(cx, rect.right));
+    const ny = Math.max(rect.top, Math.min(cy, rect.bottom));
+
+    const dx = cx - nx;
+    const dy = cy - ny;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // положение света внутри блока
+    const localX = nx - rect.left;
+    const localY = ny - rect.top;
+
+    formWrapper.style.setProperty("--glow-x", `${localX}px`);
+    formWrapper.style.setProperty("--glow-y", `${localY}px`);
+
+    if (distance < proximity) {
+      if (!isActive) {
+        isActive = true;
+        formWrapper.classList.add("glow-active");
+      }
+    } else {
+      if (isActive) {
+        isActive = false;
+        formWrapper.classList.remove("glow-active");
+      }
     }
+  });
 
-    // Функция переключения темы
-    function toggleTheme() {
-        const isDark = document.documentElement.classList.contains('dark-theme');
-        document.documentElement.classList.toggle('dark-theme', !isDark);
-        document.documentElement.classList.toggle('light-theme', isDark);
-        localStorage.setItem('theme', isDark ? 'light-theme' : 'dark-theme');
+  // Функция для определения темы по времени
+  function getPreferredTheme() {
+    const hour = new Date().getHours();
+    return hour >= 18 || hour < 6 ? 'dark' : 'light';
+  }
+
+  // Получаем сохраненную тему из localStorage или используем автоматическую
+  function getInitialTheme() {
+    const savedTheme = localStorage.getItem('userTheme');
+    // Если пользователь уже выбирал тему - используем её
+    if (savedTheme) {
+      return savedTheme;
     }
+    // Иначе используем автоматическую по времени
+    return getPreferredTheme();
+  }
 
-    // Вспомогательная функция для цветов
-    function hexToRgb(hex) {
-        hex = hex.trim().replace('#', '');
-        const r = parseInt(hex.substring(0, 2), 16);
-        const g = parseInt(hex.substring(2, 4), 16);
-        const b = parseInt(hex.substring(4, 6), 16);
-        return `${r}, ${g}, ${b}`;
-    }
+  // Установка начальной темы
+  const initialTheme = getInitialTheme();
+  body.setAttribute('data-theme', initialTheme);
 
-    // Элементы интерфейса
-    const generateBtn = document.getElementById('generate-btn');
-    const uuidDisplay = document.getElementById('uuid-display');
-    const themeBtn = document.getElementById('theme-toggle');
-    const glowText = generateBtn.querySelector('.glow-text');
+  // Переключение темы с сохранением выбора
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    // Устанавливаем новую тему
+    body.setAttribute('data-theme', newTheme);
+    
+    // Сохраняем выбор пользователя
+    localStorage.setItem('userTheme', newTheme);
+  });
 
-    // Генерация и копирование UUID
-    generateBtn.addEventListener('click', () => {
-        const uuid = generateUUID();
-        uuidDisplay.textContent = uuid;
-        uuidDisplay.dataset.uuid = uuid;
-        
-        const originalText = glowText.textContent;
-        
-        // Копирование в буфер обмена
-        navigator.clipboard.writeText(uuid).then(() => {
-            glowText.textContent = 'COPIED!';
-            generateBtn.classList.add('copied');
-            uuidDisplay.classList.add('copied');
-            
-            setTimeout(() => {
-                glowText.textContent = originalText;
-                generateBtn.classList.remove('copied');
-                uuidDisplay.classList.remove('copied');
-            }, 2000);
-        });
+  // Генерация UUID v4
+  function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
     });
+  }
 
-    // Переключение темы
-    themeBtn.addEventListener('click', toggleTheme);
+  // Флаг для отслеживания первой генерации
+  let isFirstGeneration = true;
 
-    // Генерируем первый UUID при загрузке
-    uuidDisplay.textContent = generateUUID();
+  // Добавляем пульсацию при первой загрузке
+  if (isFirstGeneration) {
+    generateBtn.classList.add('pulse');
+  }
+
+  // Функция генерации UUID
+  function generateAndDisplay() {
+    const uuid = generateUUID();
+    output.textContent = uuid;
+
+    // Копирование в буфер обмена
+    navigator.clipboard.writeText(uuid).catch(err => {
+      console.warn('Не удалось скопировать в буфер:', err);
+    });
+  }
+
+  // Кнопка генерации
+  generateBtn.addEventListener('click', () => {
+    // Показываем состояние "Скопировано"
+    generateBtn.classList.add('copied');
+
+    // Убираем пульсацию после первой генерации
+    if (isFirstGeneration) {
+      isFirstGeneration = false;
+      generateBtn.classList.remove('pulse');
+    }
+
+    // Генерируем UUID
+    generateAndDisplay();
+
+    // Возвращаем обычное состояние через 1 секунду
+    setTimeout(() => {
+      generateBtn.classList.remove('copied');
+    }, 1000);
+  });
+
+  // При загрузке сразу генерируем UUID
+  generateAndDisplay();
+
+  // Автоматическая смена темы только если пользователь не выбирал тему вручную
+  function checkTimeAndSetTheme() {
+    const userSelectedTheme = localStorage.getItem('userTheme');
+    
+    // Если пользователь не выбирал тему вручную - меняем автоматически
+    if (!userSelectedTheme) {
+      const currentHour = new Date().getHours();
+      const currentTheme = body.getAttribute('data-theme');
+      const expectedTheme = getPreferredTheme();
+
+      if (currentTheme !== expectedTheme) {
+        setTimeout(() => {
+          body.setAttribute('data-theme', expectedTheme);
+        }, 300);
+      }
+    }
+  }
+
+  // Проверяем время каждые 60 секунд (только для автоматического режима)
+  setInterval(checkTimeAndSetTheme, 60000);
 });
