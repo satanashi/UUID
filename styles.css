@@ -1,176 +1,306 @@
 :root {
-    --primary: #00f0ff;
-    --secondary: #ff2d75;
-    --bg: #0d0d1a;
-    --text: #e0e0ff;
-    --primary-rgb: 0, 240, 255;
+  --bg-start: #6e45e2;
+  --bg-mid: #88d3ce;
+  --bg-end: #c2e9fb;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --text-color: #222;
+  --text-color-light: #444;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  --btn-bg: #333;
+  --btn-text: white;
+  --transition-speed: 0.3s;
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-color-light: rgba(0, 0, 0, 0.9);
+  --glow-color-dark: rgba(255, 255, 255, 0.9);
+  --glow-color: var(--glow-color-light);
+  --glow-size: 28px;
 }
 
-.light-theme {
-    --primary: #0066ff;
-    --secondary: #ff0066;
-    --bg: #f0f0ff;
-    --text: #1a1a2e;
-    --primary-rgb: 0, 102, 255;
+[data-theme="dark"] {
+  --bg-start: #1a1a2e;
+  --bg-mid: #16213e;
+  --bg-end: #0f3460;
+  --glass-bg: rgba(0, 0, 0, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --text-color: #fff;
+  --text-color-light: #ddd;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  --btn-bg: #ffffff;
+  --btn-text: #1a1a2e;
+  --glow-color: var(--glow-color-dark);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Orbitron', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    transition: all 0.5s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-color);
+  overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+  background: linear-gradient(-45deg, var(--bg-start), var(--bg-mid), var(--bg-end));
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 }
 
-.cyber-grid {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        linear-gradient(rgba(var(--primary-rgb), 0.5), transparent 0.5px),
-        linear-gradient(90deg, rgba(var(--primary-rgb), 0.5), transparent 0.5px);
-    background-size: 40px 40px;
-    z-index: -1;
-    opacity: 0.3;
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .container {
-    width: 90%;
-    max-width: 600px;
-    text-align: center;
-}
-
-.cyber-title {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: var(--primary);
-    text-shadow: 0 0 10px var(--primary);
-}
-
-.cyber-title span {
-    color: var(--secondary);
-    text-shadow: 0 0 10px var(--secondary);
-}
-
-.cyber-box {
-    border: 2px solid var(--primary);
-    box-shadow: 0 0 20px var(--primary);
-    padding: 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.cyber-box::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        to bottom right,
-        transparent,
-        transparent,
-        var(--primary),
-        transparent
-    );
-    transform: rotate(30deg);
-    animation: shine 3s infinite;
-    opacity: 0.5;
-}
-
-@keyframes shine {
-    0% { transform: rotate(30deg) translate(-30%, -30%); }
-    100% { transform: rotate(30deg) translate(30%, 30%); }
-}
-
-.cyber-display {
-    font-size: 1.2rem;
-    letter-spacing: 1px;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--primary);
-    font-family: monospace;
-    color: var(--text);
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.cyber-button {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--text);
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    outline: none;
-}
-
-.cyber-button:hover {
-    background: rgba(var(--primary-rgb), 0.2);
-    box-shadow: 0 0 15px var(--primary);
-    transform: translateY(-2px);
-}
-
-.cyber-button .glow-text {
-    transition: all 0.3s ease;
-}
-
-.cyber-button.copied .glow-text {
-    color: var(--secondary);
-    text-shadow: 0 0 10px var(--secondary);
-}
-
-.glow-text {
-    text-shadow: 0 0 10px var(--primary);
+  width: 100%;
+  max-width: 910px;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
 }
 
 .theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  color: var(--text-color);
+  outline: none;
+  transition: transform 0.2s ease;
+  z-index: 100;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover {
-    box-shadow: 0 0 15px var(--primary);
-    transform: rotate(180deg);
+  transform: scale(1.2) rotate(10deg);
 }
 
-.cyber-display.copied {
-    animation: pulse 0.5s ease;
-    border-color: var(--secondary);
+.sun-icon,
+.moon-icon {
+  position: absolute;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+[data-theme="dark"] .sun-icon {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+}
+
+[data-theme="dark"] .moon-icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+[data-theme="light"] .sun-icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+[data-theme="light"] .moon-icon {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(20px);
+}
+
+.title {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: -0.5px;
+  animation: bounceIn 0.4s ease-out;
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+  60% { transform: translateY(-10px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.form-wrapper {
+  background: var(--glass-bg);
+  height: 280px;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  animation: slideUp 0.3s ease-out;
+  position: relative;
+  overflow: visible;
+}
+
+/* === ГЛАВНЫЙ СВЕТЯЩИЙСЯ КОНТУР КАК В WINDOWS DEFENDER === */
+.form-wrapper {
+  background: var(--glass-bg);
+  height: 280px;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  animation: slideUp 0.3s ease-out;
+  position: relative;
+  overflow: visible;
+}
+
+/* === ИСПРАВЛЕННЫЙ СВЕТЯЩИЙСЯ КОНТУР === */
+.form-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 22px;
+  
+  /* Уменьшаем размер светящегося пятна */
+  background: radial-gradient(
+    circle 250px at var(--glow-x) var(--glow-y),
+    var(--glow-color) 0%,
+    transparent 80%
+  );
+
+  opacity: 0; 
+  filter: blur(12px); /* Уменьшаем размытие для более локального эффекта */
+  transition: opacity 0.2s ease-out;
+
+  pointer-events: none;
+  z-index: 5;
+
+  /* Маска, которая оставляет свет ТОЛЬКО на границе */
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+
+  padding: 1px; /* толщина рамки */
+}
+
+/* Когда активна — плавно показываем */
+.form-wrapper.glow-active::before {
+  opacity: 1;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.uuid-output {
+  font-size: 1.6rem;
+  word-break: break-all;
+  padding: 1.8rem;
+  background: rgba(0,0,0,0.05);
+  border-radius: 12px;
+  max-width: 100%;
+  text-align: center;
+  color: var(--text-color-light);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.2s forwards;
+}
+
+.uuid-output:hover {
+  background: rgba(0,0,0,0.1);
+  transform: scale(1.02);
+}
+
+.generate-btn {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  border-radius: 50px;
+  padding: 1.2rem 3rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  min-width: 300px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+}
+
+/* Пульсация только для первой генерации */
+.generate-btn.pulse {
+  animation: pulse 2s infinite ease-in-out;
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 5px var(--primary); }
-    50% { box-shadow: 0 0 20px var(--secondary); }
-    100% { box-shadow: 0 0 5px var(--primary); }
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(0) scale(1.05); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* Эффект полного прожимания */
+.generate-btn:active {
+  transform: translateY(4px) scale(0.98) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+.generate-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Управление текстом кнопки */
+.btn-text, .btn-copied {
+  position: absolute;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.btn-copied {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.generate-btn.copied .btn-text {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.generate-btn.copied .btn-copied {
+  opacity: 1;
+  transform: translateY(0);
 }
